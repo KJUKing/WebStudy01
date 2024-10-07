@@ -14,8 +14,12 @@
   	<param-value>컨텍스트파라미터의 값</param-value>
   </context-param>
   <context-param>
-    <param-name>folderQN</param-name>
+    <param-name>imagefolderQN</param-name>
 	<param-value>/kr/or/ddit/images</param-value>
+  </context-param>
+  <context-param>
+	  <param-name>moviefolder</param-name>
+	  <param-value>D:/00.medias/movies</param-value>
   </context-param>
  	<servlet>
  		<servlet-name>DescriptionServlet</servlet-name>
