@@ -80,6 +80,7 @@ public class FunctionalInterfaceDesc {
        Function<Integer, String> function = n -> String.format("%d is odd number", n); //처리형
        Consumer<String> consumer = s -> System.out.println(s); //소비형
 
+        //하나하나 다 담아둔경우
         Optional.of(supplier.get())
                 //생성형
                 .filter(predicate)
@@ -88,6 +89,20 @@ public class FunctionalInterfaceDesc {
                 //처리형
                 .ifPresent(consumer);
                 //소비형
+
+        //바로사용
+        Optional.of(new Random().nextInt())
+                .filter(n -> n % 2 == 1)
+                .map(n -> String.format("%d is odd number", n))
+                .ifPresent(s ->System.out.println(s));
+
+        //변수에 한번 담아두고 쓰는경우
+        Optional<Integer> optionalNumber = Optional.of(new Random().nextInt());
+
+        optionalNumber.filter(n -> n % 2 == 1)
+                .map(n -> String.format("%d is odd number", n))
+                .ifPresent(s -> System.out.println(s));
+
     }
 
     @Disabled
@@ -102,13 +117,6 @@ public class FunctionalInterfaceDesc {
         });
         folder.list((d, n)-> false); //{return false;} 이걸 sugar syntax로바꿀수있다
     }
-
-
-
-
-
-
-
 
 }
 

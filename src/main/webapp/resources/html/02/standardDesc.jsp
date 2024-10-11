@@ -13,6 +13,7 @@ why : 서블릿 스펙의 단점을 보완하고, Model2 아키텍처를 적용�
     서비스 컨텐츠가 text기반의 마임을 갖는 경우, 템플릿 엔진들(jsp, thymeleaf, velocity, freemarker)이 활용됨
     템플릿 엔진이란 ? 템플릿과 데이터의 결합자
 JSP(Java Server Page) ? 자바기반의 서블릿 스펙에서 파생된 서버사이드 템플릿 엔진
+    3가지 언어로 축약한다면?
 
 HOW : 정적인 템플릿 요소를 제외한 동적 요소를 작성하는 방법
     1. 정적 요소(front-end) : 일반 텍스트, HTML, CSS, JavaScript
