@@ -12,8 +12,7 @@
      options.method = method;
      // request header : content-type, accept
      let headers = {
-         accept : "application/json",
-
+         accept : "application/json"
      }
      options.headers = headers;
      //k=v&k=v&k=v
@@ -38,8 +37,7 @@
              } else {
                  throw new Error(`응답 실패 , ${resp.status}`);
              }
-         })
-         .then(({operand, expression, result}) => resultArea.innerHTML = `${operand} ! =${result} = ${expression}`)
+         }).then(({operand, expression, result})=>resultArea.innerHTML = ` ${operand} ! = ${expression} = ${result} `)
          .catch(console.log);
 
  })

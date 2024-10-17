@@ -30,17 +30,14 @@ public class FactorialControllerServlet_case6 extends HttpServlet {
         InputStream is = req.getInputStream();
         FactorialVO facVO = mapper.readValue(is, FactorialVO.class);
 
-            String accept = req.getHeader("accept");
-            resp.setContentType(accept);
+        String accept = req.getHeader("accept");
+        resp.setContentType(accept);
 
-
-            mapper.writeValue(resp.getWriter(), facVO);
         try (
-                PrintWriter out = resp.getWriter()
+            PrintWriter out = resp.getWriter();
         ) {
             mapper.writeValue(out, facVO);
         }
-
     }
 }
 

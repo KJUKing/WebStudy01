@@ -16,7 +16,7 @@ form태그는 submit 이벤트에서 동기 요청을 발생시킨다
 
 </div>
 
-<script type="text/javascript" src="<%=request.getContextPath() %>/resources/js/app/factorial/case5Form.js">
+<script type="text/javascript" src="<%=request.getContextPath() %>/resources/js/app/factorial/case6Form.js">
 	
 </script>
 </body>

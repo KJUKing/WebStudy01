@@ -38,7 +38,11 @@ public class FactorialControllerServlet_case5 extends HttpServlet {
             resp.setContentType(accept);
 
             ObjectMapper mapper = new ObjectMapper();
-            mapper.writeValue(resp.getWriter(), facVO);
+            try(
+                PrintWriter out = resp.getWriter();
+            ){
+                mapper.writeValue(out, facVO);
+            }
 
         }
     }
