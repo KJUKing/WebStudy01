@@ -40,7 +40,7 @@
             %>
         key1 (line) : <%=request.getParameter("key1")%>
         key3 (body) : <%=request.getParameter("key3")%>
-    2) 멀티파트 form0data
+<%--        2) 멀티파트 form0data : <a href--%>
         3) json[xml] payload <a href="<%=request.getContextPath()%>/03/jsonAndRest.jsp">JSON and Rest</a>
 </pre>
 <pre>
