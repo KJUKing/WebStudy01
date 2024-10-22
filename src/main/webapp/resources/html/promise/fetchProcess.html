@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <button id="lazyBtn">데이터 로드(promise)</button>
+    <button id="lazyBtnAsync">데이터 로드(async)</button>
+    <div id="resultArea"></div>
+<script>
+    lazyBtnAsync.onclick = async function () {
+        try {
+            let resp = await fetch("./data/dummy.json");
+            if (resp.ok) {
+                let {prop, number} = await resp.json();
+                resultArea.innerHTML = `${prop}, ${number}`;
+            } else {
+                throw new Error(`${resp.status}`);
+            }
+        } catch (err){
+            console.error(err);
+        }
+    };
+
+    //onclick쓰면 맨마지막거밖에 실행이안된다.
+    lazyBtn.onclick = function () {
+        let promise = fetch("./data/dummy.json");
+        console.log(promise);
+        promise.then(resp => {
+            if (resp.ok) {
+                let innerPromise = resp.json();
+                console.log("in then function : ", innerPromise);
+                return innerPromise
+            } else {
+                throw new Error(`${resp.status}`);
+            }
+        }).then(({prop, number}) => resultArea.innerHTML = `${prop}, ${number}`)
+            .catch(console.error);
+    };
+</script>
+</body>
+</html>
