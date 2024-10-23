@@ -52,9 +52,19 @@
 </form>
 <div id="result-area"></div>
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
         const fileForm = document.getElementById("file-form");
         const resultArea = document.getElementById("result-area");
+
+        const fnListup = list => {
+                let href="<%=request.getContextPath()%>/multipart/download.do?filename="
+                resultArea.innerHTML = list.map(n => `<p><a href="\${href+n}"> \${n}</a></p>`)
+                    .join("\n")};
+
+        let resp = await fetch("<%=request.getContextPath()%>/multipart/fileList");
+        let list = await resp.json();
+        fnListup(list);
+
         fileForm.addEventListener("submit", (e) => {
             e.preventDefault();
             const form = e.target;
@@ -62,7 +72,6 @@
             let method = "post";
             let headers = {
                 "accept" : "application/json"
-
             }
             let body = new FormData(form);
             fetch(url, {
@@ -71,10 +80,20 @@
                 body: body
             })
                 .then(resp => resp.json())
-                .then(list => resultArea.innerHTML = list.map(n => `<p>\${n}</p>`).join("\n"))
+                .then(fnListup)
                 .catch(console.error)
                 .finally(() => fileForm.reset());
         })
+
+        <%--resultArea.addEventListener("click", (e) => {--%>
+        <%--    if (e.target.tagName == "P") {--%>
+        <%--        const filename = e.target.textContent.trim();--%>
+        <%--        console.log(filename);--%>
+        <%--        const url ="<%=request.getContextPath()%>/multipart/download.do?filename=" + encodeURIComponent(filename);--%>
+
+        <%--        window.location.href = url;--%>
+        <%--    }--%>
+        <%--} )--%>
     })
 </script>
 </body>

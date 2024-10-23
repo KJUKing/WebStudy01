@@ -23,13 +23,13 @@ public class CalculateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-
         req.getRequestDispatcher("WEB-INF\\views\\calc\\calForm.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        try {
         double left = Optional.of(req.getParameter("left"))
                 .map(Double::parseDouble)
                 .get();
@@ -49,5 +49,9 @@ public class CalculateServlet extends HttpServlet {
 
         resp.setContentType("application/json;charset=UTF-8");
         new ObjectMapper().writeValue(resp.getWriter(), calVO);
+        }catch (IllegalArgumentException e) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return;
+        }
     }
 }

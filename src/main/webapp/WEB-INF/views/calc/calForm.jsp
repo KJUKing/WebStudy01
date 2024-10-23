@@ -12,8 +12,8 @@
 </head>
 <body>
 <form name="calForm" method="post">
-    <input type="text" name="left" placeholder="좌항피연산자" required />
-    <select name="operator" required>
+    <input type="text" name="left" placeholder="좌항피연산자"  />
+    <select name="operator" >
         <option value="">연산자</option>
         <%=
             Arrays.stream(OperatorType.values())
@@ -21,15 +21,29 @@
                     .collect(Collectors.joining("\n"))
         %>
     </select>
-    <input type="text" name="right" placeholder="우항피연산자" required />
+    <input type="text" name="right" placeholder="우항피연산자" />
     <button type="submit">=</button>
 </form>
 <div id="result-area"></div>
 <script>
     const calForm = document.calForm;
     const resultArea = document.getElementById("result-area");
+    const fnValidate = (form) => {
+        let inValid = false;
+        form.querySelectorAll("[name]").forEach(ipt => {
+            // if(!ipt.value) valid = false;
+            inValid = !ipt.value;
+        });
+        return !inValid;
+    }
+
     calForm.addEventListener("submit", async (e) => {
         e.preventDefault();
+        let valid = fnValidate(e.target);
+        if (!valid) {
+            alert("유효성 검증 통과 못함");
+            return false;
+        }
         let resp = await fetch("", {
             method: "post",
             headers:{

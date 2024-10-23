@@ -1,5 +1,6 @@
+<%@ page import="java.net.URLEncoder" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+		 pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,12 +36,40 @@
 			415 : UnSupported-Media-Type 클라이언트가 전송한 BODY컨텐츠를 서버에서 파싱할 수 없을 때 표현
 			<a href="status400.jsp">400번대 테스트 페이지</a>
 		5) 5xx : Failure, 서버측 오류, 500(Internal Server Error 서버의 정보 노출 제한)
-	2. Response Header
+	2. Response Header : setContentType, setContentLength, setHeader(name, value)
+		1) Content-Type, Content-Length(공통 헤더) : body의 content에 대한 메타 데이터
+			Content-Type(body content 종류)
+			Content-Length(body content 길이)
+
+		2) Content-Disposition(공통 헤더)
+			request header : method="post", content-type="multipart/form-data"
+							body의 부분집합(part) 하나에 대한 메타데이터로 사용됨.
+							ex)
+							문자 기반 파트 Content-Disposition : form-data; name="파트명"
+							파일 기반 파트 Content-Disposition : form-data; name="파트명"; filename="파일명"
+			response header ==>
+				Content-Disposition
+				- inline(default) : 브라우저의 창 내부에서 웹 페이지의 형태로 컨텐츠 소비.
+				- attachment : 다운로드 받고 저장하라 저장명은 filename 지시자로 결정
+						filename 내에 특수문자나 공백이 포함된다면, url encoding 방식이나 replace구조가 필요함
+			<%
+				String filename = "더미 1.html";
+				filename = URLEncoder.encode(filename, "UTF-8").replace("+" , " ");
+				response.setHeader("Content-Disposition", "attachment; filename=\""+filename+"\"");
+			%>
+		3) Refresh(response전용 헤더)
+		4) Cache-Control(response)
+		5) Location(response)
 	3. Responsw Body(Message Body, Content Body)
 		servlet : response.getWriter(), response.getOutputStream()
 		jsp : 표현식 , out 객체
 
 </pre>
+<form method="post" enctype="multipart/form-data">
+	<input type="text" name="param1"/>
+	<input type="file" name="uploadFile"/>
+	<button type="submit">전송</button>
+</form>
 <a href="">GET 요청</a>
 <form enctype="application/x-www-form-urlencoded" method="post">
 	<button type="submit">POST 전송</button>
