@@ -50,16 +50,28 @@
     <input type="file" name="uploadFile" />
     <button type="submit">전송</button>
 </form>
+
+
+<%--삭제버튼--%>
+<button id="delete-button">삭제</button>
+
+<%--파일리스트--%>
 <div id="result-area"></div>
+
+
 <script>
     document.addEventListener("DOMContentLoaded", async () => {
         const fileForm = document.getElementById("file-form");
         const resultArea = document.getElementById("result-area");
+        const deleteButton = document.getElementById("delete-button");
 
+        // 체크박스 추가 및 파일 목록 렌더링 함수
         const fnListup = list => {
-                let href="<%=request.getContextPath()%>/multipart/download.do?filename="
-                resultArea.innerHTML = list.map(n => `<p><a href="\${href+n}"> \${n}</a></p>`)
-                    .join("\n")};
+            let html = list.map(n =>
+            `<p><input type="checkbox" name="files" value="\${n}"><a href="<%=request.getContextPath()%>/multipart/download.do?filename=\${encodeURIComponent(n)}">\${n}</a></p>`).join("\n");
+            resultArea.innerHTML = html;
+        };
+
 
         let resp = await fetch("<%=request.getContextPath()%>/multipart/fileList");
         let list = await resp.json();
@@ -85,15 +97,42 @@
                 .finally(() => fileForm.reset());
         })
 
-        <%--resultArea.addEventListener("click", (e) => {--%>
-        <%--    if (e.target.tagName == "P") {--%>
-        <%--        const filename = e.target.textContent.trim();--%>
-        <%--        console.log(filename);--%>
-        <%--        const url ="<%=request.getContextPath()%>/multipart/download.do?filename=" + encodeURIComponent(filename);--%>
 
-        <%--        window.location.href = url;--%>
-        <%--    }--%>
-        <%--} )--%>
+        deleteButton.addEventListener("click", () => {
+            const checkboxes = document.querySelectorAll('input[name="files"]:checked');
+            const filenames = Array.from(checkboxes)
+                                    .map(cb => cb.value);
+
+            if (filenames.length == 0) {
+                alert("삭제할 파일을 선택하세요.");
+                return;
+            }
+
+            let url = "<%=request.getContextPath()%>/multipart/delete.do";
+            let method = "post";
+            let headers = {
+                "Content-Type": "application/json",
+                "accept": "application/json"
+            };
+            let body = JSON.stringify({filenames});
+            fetch(url, {
+                method: method,
+                headers: headers,
+                body: body
+            })
+                .then(resp => resp.json())
+                .then(response => {
+                    if (response.status === "success") {
+                        // 삭제 성공 후 파일 목록 재요청
+                        return fetch("<%=request.getContextPath()%>/multipart/fileList")
+                            .then(resp => resp.json())
+                            .then(fnListup);
+                    } else {
+                        throw new Error("삭제 실패");
+                    }
+                })
+                .catch(console.error);
+        });
     })
 </script>
 </body>
