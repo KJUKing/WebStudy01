@@ -24,6 +24,9 @@ public class DeleteServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
+
         // 요청이 JSON인지 확인 (415 Unsupported Media Type)
         String contentType = req.getContentType();
         if (contentType == null || !contentType.contains("application/json")) {
@@ -56,8 +59,11 @@ public class DeleteServlet extends HttpServlet {
                     Files.delete(filePath);
                 }
             }
-            // json fetch결과값을 넘겨줘야하기때문
-            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.setContentType("application/json;charset=utf-8");
+            PrintWriter out = resp.getWriter();
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("status", "success");
         } catch (Exception e) {
             // 500오류발생하기
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "파일 삭제 중 오류 발생");

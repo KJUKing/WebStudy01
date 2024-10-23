@@ -29,6 +29,9 @@ public class SaveDirFileListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
+
         resp.setContentType("application/json;charset=utf-8");
         List<Path> children = new ArrayList<>();
         Files.walkFileTree(saveDirPath, new SimpleFileVisitor<Path>() {

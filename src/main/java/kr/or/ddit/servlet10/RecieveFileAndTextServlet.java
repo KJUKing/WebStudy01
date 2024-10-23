@@ -35,7 +35,9 @@ public class RecieveFileAndTextServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("utf-8");
+
+        req.setCharacterEncoding("UTF-8");
+        resp.setCharacterEncoding("UTF-8");
 
         System.out.printf("param1 : %s \n", req.getParameter("param1"));
         System.out.printf("param2 : %s \n", req.getParameter("param2"));
