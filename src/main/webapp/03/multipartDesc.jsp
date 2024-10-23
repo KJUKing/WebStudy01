@@ -52,13 +52,13 @@
 </form>
 
 
-<%--삭제버튼--%>
-<button id="delete-button">삭제</button>
+
 
 <%--파일리스트--%>
 <div id="result-area"></div>
 
-
+<%--삭제버튼--%>
+<button id="delete-button">삭제</button>
 <script>
     document.addEventListener("DOMContentLoaded", async () => {
         const fileForm = document.getElementById("file-form");

@@ -24,36 +24,44 @@ public class DeleteServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        // JSON인지 확인하기 415오류 써보기
+        // 요청이 JSON인지 확인 (415 Unsupported Media Type)
         String contentType = req.getContentType();
         if (contentType == null || !contentType.contains("application/json")) {
-            resp.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "지원하지 않는 미디어 타입임");
+            resp.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "지원하지 않는 미디어 타입입니다.");
             return;
         }
 
-        // 오브젝트매퍼써서 JSON 데이터 파싱하기
+        // ObjectMapper를 사용하여 JSON 데이터 파싱
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> data = mapper.readValue(req.getInputStream(), Map.class);
         List<String> filenames = (List<String>) data.get("filenames");
 
-        //400오류 만들기
+        // 파일명이 없는 경우 400 Bad Request
         if (filenames == null || filenames.isEmpty()) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "삭제할 파일명이 없음");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "삭제할 파일명이 없습니다.");
             return;
         }
 
         // 파일 삭제하기
-        for (String filename : filenames) {
-            // 파일명 검증 (경로 조작 방지) 이건 지피티가 보완해줌
-            if (filename.contains("..") || filename.contains("/") || filename.contains("\\")) {
-                continue; // 부적절한 파일명은 무시
+        try {
+            for (String filename : filenames) {
+                // 파일명 검증 (경로 조작 방지) 지피티피셜
+                if (filename.contains("..") || filename.contains("/") || filename.contains("\\")) {
+                    continue; // 부적절한 파일명은 무시
+                }
+                //코드 재활용
+                Path filePath = saveDirPath.resolve(filename);
+                File file = filePath.toFile();
+                if (file.exists() && file.isFile()) {
+                    Files.delete(filePath);
+                }
             }
-            Path filePath = saveDirPath.resolve(filename);
-            File file = filePath.toFile();
-            // isDirectory를 썼으니 이번에는 isFile일때로해보기
-            if (file.exists() && file.isFile()) {
-                Files.delete(filePath);
-            }
+            // json fetch결과값을 넘겨줘야하기때문
+            resp.setStatus(HttpServletResponse.SC_OK);
+        } catch (Exception e) {
+            // 500오류발생하기
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "파일 삭제 중 오류 발생");
+            e.printStackTrace();
         }
     }
 }
