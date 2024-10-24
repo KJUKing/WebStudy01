@@ -37,7 +37,10 @@ import static java.time.format.TextStyle.FULL;
 public class CalendarUIDataServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-            Locale locale = Locale.getDefault();
+
+        System.out.println("================캐싱데이터 사용하지않고 있음.================");
+
+        Locale locale = Locale.getDefault();
             Map<String, Object> target = new HashMap<>();
             target.put("months", Arrays.stream(Month.values())
                     .map(m -> m.getDisplayName(FULL, locale))
@@ -56,6 +59,7 @@ public class CalendarUIDataServlet extends HttpServlet {
             target.put("zones", zones);
 
             resp.setContentType("application/json;charset=UTF-8");
+            resp.setHeader("Cache-Control", "private, max-age="+10);
             ObjectWriter mapper = new ObjectMapper().writerWithDefaultPrettyPrinter();
 
             mapper.writeValue(resp.getWriter(), target);

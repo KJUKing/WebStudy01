@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        // 사람은 이름을 갖고있고, 이름은 성과 이름으로 구성됨
+        // 사람은 직립보행을 함
+        class Person{
+            constructor(firstName, lastName) {
+                // if (prop1)
+                //     this.prop1 = prop1;
+                // else {
+                //     this.prop1 = 23;
+                //
+                //     this.prop1 = prop1 ? prop1 : 23;
+                // this.prop1 = prop1 ?? 23;
+
+                if (!firstName || !lastName) {
+                    throw new Error('성 이름 누락')
+                }
+                this.firstName =firstName;
+                this.lastName =lastName;
+                this.fullName = lastName + firstName
+
+            }
+            walk(){
+                console.log(`${this.lastName}${this.firstName}가 걷고있음`)
+            }
+        }
+        let obj1 = new Person("민재", "유");
+
+        obj1.walk();
+        console.log(obj1.fullName)
+    </script>
+</body>
+</html>

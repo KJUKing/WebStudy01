@@ -57,9 +57,11 @@
 				filename = URLEncoder.encode(filename, "UTF-8").replace("+" , " ");
 				response.setHeader("Content-Disposition", "attachment; filename=\""+filename+"\"");
 			%>
-		3) Refresh(response전용 헤더)
-		4) Cache-Control(response)
-		5) Location(response)
+		3) Refresh(response전용 헤더) - 얘는 비동기방식으로 처리가 불가능함 무조건 동기 방식
+								<a href="refresh-auto-request.jsp">refresh header</a>
+
+		4) Cache-Control(response) <a href="cacheControl.jsp">cacheControl header</a>
+		5) Location(response) <a href="flowControl.jsp">flow control</a>
 	3. Responsw Body(Message Body, Content Body)
 		servlet : response.getWriter(), response.getOutputStream()
 		jsp : 표현식 , out 객체
