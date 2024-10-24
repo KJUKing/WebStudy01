@@ -15,22 +15,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-import java.time.ZoneId;
-import java.time.format.TextStyle;
-import java.time.Month;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-import static java.time.format.TextStyle.*;
 import static java.time.format.TextStyle.FULL;
 
 @WebServlet("/calendar/ui-data")
