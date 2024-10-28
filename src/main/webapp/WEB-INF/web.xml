@@ -2,12 +2,7 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
   <display-name>WebStudy01</display-name>
   <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
     <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   <context-param>
   	<param-name>contextParam1</param-name>
@@ -53,4 +48,28 @@
 		<servlet-name>ImageStreamingServlet</servlet-name>
 		<url-pattern>/image/streaming.hw</url-pattern>
 	</servlet-mapping>
+	<session-config>
+	<session-timeout>4</session-timeout>
+	</session-config>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>CALENDAR</web-resource-name>
+			<url-pattern>/calendar/*</url-pattern>
+		</web-resource-collection>
+		<web-resource-collection>
+			<web-resource-name>INDEX</web-resource-name>
+			<url-pattern>/index.jsp</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>ROLE_ADMIN</role-name>
+
+		</auth-constraint>
+	</security-constraint>
+	<login-config>
+		<auth-method>FORM</auth-method>
+		<form-login-config>
+			<form-login-page>/login/loginForm.jsp</form-login-page>
+			<form-error-page>/login/loginForm.jsp?error=true</form-error-page>
+		</form-login-config>
+	</login-config>
 </web-app>

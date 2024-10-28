@@ -25,6 +25,11 @@
 
 //        rd.include(request, response);
     --%>
+    <%
+        request.setAttribute("reqeustAttr", "요청 속성");
+        session.setAttribute("sessionAttr", "세션 속성");
+        application.setAttribute("applicationAttr", "어플리케이션 속성");
+    %>
 <%--    <jsp:forward page="/06/dest.jsp" />--%>
 <%--    <jsp:include page="/06/dest.jsp" />--%>
     2. Redirect : 자원의 위치를 재지정하는 경우 PostRedirectGet 패턴의 구조에서 활용됨
@@ -33,10 +38,10 @@
         --> Connection close, StateLess
         3) Location 헤더 방향으로 완전히 새로운 요청이 전송
         4) 최종 응답 전송
-    <%--
+    <%
         String location = request.getContextPath() +"/06/dest.jsp";
         response.sendRedirect(location);
-    --%>
+    %>
 
 </pre>
 </body>

@@ -37,7 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @WebServlet("/mbti/*")
 @MultipartConfig
 public class MbtiServlet extends HttpServlet{
-    private Map<String, String>  mbtiMap;
+    public Map<String, String>  mbtiMap;
     private ServletContext application;
     private Path mbtiFolderPath;
     @Override

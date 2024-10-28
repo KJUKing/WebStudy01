@@ -6,6 +6,11 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
     <link rel="stylesheet" href=<%=request.getContextPath()%>"/resources/bootstrap-5.3.3-dist/bootstrap-5.3.3-dist/css/bootstrap.min.css" />
+<style type="text/css">
+    #new-menu {
+        background-color: yellow;
+    }
+</style>
 </head>
 <body>
 <h4>최종 응답 페이지</h4>
