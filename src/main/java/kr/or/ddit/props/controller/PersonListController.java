@@ -23,7 +23,7 @@ import java.util.List;
  */
 @WebServlet("/props/personList.do")
 public class PersonListController extends HttpServlet {
-    private PersonService service = new PersonServiceImpl();
+    private PersonService service = PersonServiceImpl.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

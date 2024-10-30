@@ -4,16 +4,28 @@ import kr.or.ddit.props.PersonVO;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class PropertiesFilePersonDAOImpl implements PersonDAO {
 
     private Properties props;
 
-    public PropertiesFilePersonDAOImpl() {
+    private static PersonDAO selfInstance;
+
+    public static PersonDAO getInstance() {
+        if (selfInstance == null) {
+            selfInstance = new PropertiesFilePersonDAOImpl();
+        }
+        return selfInstance;
+    }
+
+    private PropertiesFilePersonDAOImpl() {
         this.props = new Properties();
         String qn = "/kr/or/ddit/props/PersonData.properties";
         try (InputStream is = this.getClass().getResourceAsStream(qn);){
@@ -24,14 +36,40 @@ public class PropertiesFilePersonDAOImpl implements PersonDAO {
 
     }
 
+    private void commit() {
+        String qn = "/kr/or/ddit/props/PersonData.properties";
+        try {
+            Path filePath = Paths.get(this.getClass().getResource(qn).toURI());
+
+            try (OutputStream os = Files.newOutputStream(filePath, StandardOpenOption.APPEND)) {
+                props.store(os, LocalDateTime.now().toString());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
     @Override
     public int insertPerson(PersonVO person) {
-        return 0;
+        props.setProperty(person.getId(), personToString(person));
+        commit();
+        return 1;
     }
 
     @Override
     public PersonVO selectPerson(String id) {
-        return null;
+        return Optional.ofNullable(props.getProperty(id))
+                .map(v -> stringToPerson(id, v))
+                .orElse(null);
+    }
+
+    private String personToString(PersonVO person) {
+        String value = String.format("%s|%s|%s|%s",
+                person.getName(),
+                person.getGender(),
+                person.getAge(),
+                person.getAddress());
+        return value;
     }
 
     private PersonVO stringToPerson(String key, String value) {

@@ -1,14 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%-- 세션에서 id 값 가져오기 --%>
+<c:set var="sessionId" value="${sessionScope.id}" />
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
+    <style>
+        #new
+    </style>
 </head>
 <body>
 <%--${list}--%>
+<a href="<c:url value='/props/personInsert.do'/>">신규등록</a>
 
 <table>
     <thead>
@@ -21,7 +28,7 @@
     <tbody>
     <c:if test="${not empty list}">
         <c:forEach items="${list}" var="person">
-            <tr>
+            <tr style="background-color: <c:if test='${person.id == sessionId}'>#D3D3D3</c:if>;">
                 <td>
                     -->
                     <c:url value="/props/personDetail.do" var="detailUrl">
