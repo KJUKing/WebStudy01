@@ -48,7 +48,8 @@
         2) BAERER : oAuth, OIDC 서비스 등에서 사용되는 토큰 기반의 인증 방식
                 ex) Authorization : Baerer encrypt(base64(c001:java))
     2. 세션 기반 인증
-        2) FORM
+        2) FORM : j_username, j_password, j_security_check. 등으로 WAS를 통해 인증.
+
 
 </pre>
 </body>

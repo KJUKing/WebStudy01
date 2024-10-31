@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBTI</title>
+</head>
+<body>
+<form id="mbtiform" action="../../../mbti">
+    <select name="type" onchange="this.form.requestSubmit();">
+
+    </select>
+    <button type="submit">전송</button>
+    <button type="button" id="del-btn">삭제</button>
+</form>
+<form id="newform" action="../../../mbti" method="post" enctype="multipart/form-data">
+    <input type="text" name="mbtiType" placeholder="mbti 유형"/>
+    <input type="text" name="mbtiDesc" placeholder="mbti 설명"/>
+    <input type="file" name="mbtiFile" accept="text/html"/>
+    <button type="submit">전송</button>
+</form>
+
+<div id="result-area"> </div>
+
+<script type="text/javascript">
+
+    document.addEventListener("DOMContentLoaded",(e)=>{
+        const sel = document.querySelector("[name=type]")
+
+        fetch("../../../mbti")
+            .then(resp=>resp.json())
+            .then(data=>{
+                for(let key in data){
+                    let val = data[key]
+                    console.log(key)
+                    console.log(val)
+                    sel.insertAdjacentHTML("beforeend",`<option value="${key}">${val}</option>`)
+                }
+            })
+
+
+
+        console.log(sel)
+        const resultArea = document.getElementById("result-area");
+        mbtiform.addEventListener("submit", async (e)=>{
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const mbtiType = formData.get("type")
+
+            const url = form.action;
+            const purl = `${url}/${mbtiType}`;
+
+            let resp = await fetch(purl);
+
+            let text = await resp.text();
+
+            resultArea.innerHTML = text;
+            console.log(resp);
+        }); // mbtiform submit end
+
+        newform.addEventListener("submit", async(e)=>{
+            e.preventDefault();
+            let url = newform.action;
+            let method = "post";
+            let formData = new FormData(newform);
+            let resp = await fetch(url, {
+                method:method,
+                body:formData
+            });
+            if(resp.ok){
+                let mbtiMap = await resp.json();
+                sel.innerHTML = Object.entries(mbtiMap)
+                    .map(el=>`<option value="${el[0]}">${el[1]}</option>`)
+                    .join("\n");
+                newform.reset();
+            }
+        });
+    }); // DOMContentLoaded end
+
+</script>
+</body>
+</html>

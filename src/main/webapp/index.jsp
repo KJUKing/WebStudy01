@@ -13,13 +13,14 @@
 인증되지 않은 사용자에게는 로그인 페이지 링크를 출력함.
 
 
-<c:set var="userPrincipal" value="${pageContext.request.userPrincipal}"/>
-
-<c:if test="${empty userPrincipal}">
+<%--<c:set var="userPrincipal" value="${pageContext.request.userPrincipal}"/>--%>
+<%--<c:if test="${empty userPrincipal}">--%>
+<c:if test="${empty authMember}">
     <a href="${pageContext.request.contextPath}/login/loginForm.jsp">로그인</a>
 </c:if>
-<c:if test="${not empty userPrincipal}">
-    <h4>현재 사용자 : ${userPrincipal}</h4>
+<%--<c:if test="${not empty userPrincipal}">--%>
+<c:if test="${not empty authMember}">
+    <h4>현재 사용자 : ${userPrincipal}, ${AuthMember}</h4>
     <form id="logoutForm" method="post" action="${pageContext.request.contextPath}/login/logout.do"></form>
     <a href="javascript:logoutForm.requestSubmit()">로그아웃</a>
 </c:if >

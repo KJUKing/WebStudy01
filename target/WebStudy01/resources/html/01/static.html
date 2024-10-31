@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h4>정적자원-수정</h4>
+<pre>
+--- 정적 자원(고정된 파일)의 형태로 동적 UI를 제공하기 위해 [javascript] 로직을 활용하고 있음.
+하드코딩된 텍스트
+<button id="changebtn">다크테마로 변경</button>
+현재 시간(클라이언트 사이드) : <span id="timearea"></span>
+현재 시간(서버 사이드) : <span id="serverarea"></span>
+</pre>
+<!-- MIME 텍스트 : 전송 컨텐츠의 종류 표현 -->
+<script type="text/javascript">
+	const serverarea = document.getElementById("serverarea");
+	
+	fetch("/WebStudy01/now2.do")
+		.then((resp) =>resp.json())//json으로바꾸기
+		.then((jsonObj)=>{
+			serverarea.innerHTML = jsonObj.now;//json으로바꾸기
+		})
+		.catch(console.log);
+    const timearea = document.getElementById("timearea");
+    setInterval(() => {
+    	timearea.innerHTML = new Date()	
+    }, 1000);
+	const btn = document.getElementById("changebtn");
+	btn.addEventListener("click", (event)=>{
+		document.body.style.backgroundColor="black";
+		document.body.style.color="white";
+	})
+</script>
+
+
+</body>
+</html>

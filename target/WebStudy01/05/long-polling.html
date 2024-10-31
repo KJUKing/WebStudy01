@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+    <style type="text/css">
+        .invisible{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="has-watch"></div>
+<div class="has-watch"></div>
+<div class="has-watch"></div>
+
+<button id="stop-btn">중지</button>
+<button id="resume-btn" class="invisible">재개</button>
+<hr/>
+<h4>서버의 시간</h4>
+<div class="has-watch" data-wl-url="getServerTime.jsp?zone=Asia/Seoul"> </div>
+<select id="zone">
+
+</select>
+<script src="../resources/js/app/05/watchLib.js"></script>
+<script src="../resources/js/app/05/long-polling.js"></script>
+</body>
+</html>

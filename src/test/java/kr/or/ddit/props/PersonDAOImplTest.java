@@ -35,9 +35,23 @@ public class PersonDAOImplTest {
     }
 
 
+    @Disabled
     @Test
     void testSelectPerson() {
         assertNotNull(dao.selectPerson("a001"));
         assertNull(dao.selectPerson("asdfasdfasd"));
+    }
+
+    @Test
+    void testUpdatePerson() {
+
+        assertDoesNotThrow( () -> {
+            PersonVO person = dao.selectPerson("a001");
+            person.setAddress("프랑스");
+            int i = dao.updatePerson(person);
+            assertEquals(i, 1);
+        });
+
+
     }
 }

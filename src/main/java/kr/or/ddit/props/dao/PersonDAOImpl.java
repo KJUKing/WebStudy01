@@ -1,6 +1,7 @@
 package kr.or.ddit.props.dao;
 
 import kr.or.ddit.db.ConnectionFactory;
+import kr.or.ddit.db.ConnectionFactoryCP;
 import kr.or.ddit.props.PersonVO;
 
 import java.sql.*;
@@ -39,7 +40,7 @@ public class PersonDAOImpl implements PersonDAO {
 
         try(
 //      2. Connection 생성
-        Connection conn = ConnectionFactory.getConnection();
+        Connection conn = ConnectionFactoryCP.getConnection();
 //      3. 쿼리객체생성
         PreparedStatement pstmt = conn.prepareStatement(sql.toString());
         ){
@@ -55,7 +56,7 @@ public class PersonDAOImpl implements PersonDAO {
         String sql = "SELECT * FROM PERSON WHERE ID = ?";
         PersonVO person = null;
         try (
-                Connection conn = ConnectionFactory.getConnection();
+                Connection conn = ConnectionFactoryCP.getConnection();
 
                 PreparedStatement pstmt = conn.prepareStatement(sql)
         ) {
@@ -117,7 +118,24 @@ public class PersonDAOImpl implements PersonDAO {
 
     @Override
     public int updatePerson(PersonVO person) {
-        return 0;
+        String sql = "UPDATE PERSON SET NAME = ?, GENDER = ?, AGE = ?, ADDRESS = ? WHERE ID = ?";
+        try(
+//      2. Connection 생성
+                Connection conn = ConnectionFactoryCP.getConnection();
+//      3. 쿼리객체생성
+                PreparedStatement pstmt = conn.prepareStatement(sql.toString());
+        ){
+            pstmt.setString(1, person.getName());
+            pstmt.setString(2, person.getGender());
+            pstmt.setString(3, person.getAge());
+            pstmt.setString(4, person.getAddress());
+            pstmt.setString(5, person.getId());
+
+
+            return pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

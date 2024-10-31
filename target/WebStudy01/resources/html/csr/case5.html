@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../../css/csr/case5.css">
+</head>
+<body>
+<form method='get' action='../../../movie/streaming.hw' data-role="movie" data-target-area="#movie-area">
+    <select name ='video' onchange='this.form.requestSubmit()' required>
+        <option value="">영상 선택</option>
+    </select>
+</form>
+<form method='get' action='../../../image/streaming.hw'  data-role="image" data-target-area="#image-area">
+    <select name ='image' onchange='this.form.requestSubmit()' required>
+        <option value="">이미지 선택</option>
+    </select>
+</form>
+<div id="image-area"></div>
+<div id="movie-area"></div>
+<script type="text/javascript" src="../../js/app/csr/case5.js"></script>
+</body>
+</html>

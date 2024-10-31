@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        // 1
+        let obj1 = {
+            //이미 확정된 하나의 인스턴스만 생성됨
+            prop1: 23,
+            prop2: function () {
+
+            },
+            prop3: () => {
+
+            }
+        };
+        // 2. 생성자 함수 정의
+        function Person(){
+            this.prop1 = 23;
+            this.prop2 = function () {
+
+            };
+            this.prop3 = () => {
+
+            };
+        }
+        let obj2 = new Person();
+        console.log(obj2.prop1);
+
+        let obj3 = new Person();
+        obj3.prop1 = 1000;
+        console.log(obj3.prop1);
+
+        //3, factory 함수 사용
+        function  factoryPerson(){
+            return {
+                prop1: 23,
+                prop2: function () {
+
+                }
+            };
+        }
+
+        let obj4 = new factoryPerson();
+
+    </script>
+
+</body>
+</html>

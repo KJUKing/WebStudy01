@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+
+        .sunday {
+            color: red;
+        }
+
+        .saturday {
+            color: blue;
+        }
+
+        .before, .after {
+            color: silver;
+        }
+
+        #today {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+<form id="calForm" action="./calendar.jsp">
+  <input type="number" name="year"/>
+  <select name="month">
+  </select>
+
+  <select name="locale">
+  </select>
+
+  <select name="zone">
+  </select>
+</form>
+<div id="calArea">
+</div>
+
+<form method="post" action="../login/logout.do">
+    <button type="submit">로그아웃</button>
+
+</form>
+<script type="text/javascript" src="../resources/js/app/calendar/calForm.js"></script>
+
+</body>
+</html>

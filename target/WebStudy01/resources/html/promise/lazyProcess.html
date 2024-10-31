@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="log-area"> </div>
+    <script>
+        const logArea = document.getElementById("log-area");
+        function log(message) {
+            // logArea.insertAdjacentHTML("beforeend", `<p>${message}</p>`)
+            console.log(message);
+        }
+        // case2 : 함수의 실행시점을 지연시키기위한 lazy loading 구조. setTimeOut
+        // --> 지연된 함수내에서 생성된 데이터를 조회할 수 없음
+        function fnStep1() {
+            log("STEP1");
+        }
+        function fnStep2() {
+            log("STEP2");
+        }
+        function fnStep3() {
+            log("STEP3");
+        }
+
+        // template method pattern
+        function fnTemplate(fnHook) {
+            fnStep1();
+            fnStep2();
+            fnHook(log, console.error);
+            fnStep3();
+        }
+
+        function fnMiddle(fnCallback, fnFailureCallback) {
+            setTimeout(() => {
+                let intNum = Math.trunc(Math.random() * 100);
+                if (intNum % 2 == 0) {
+                    let result = `${intNum}이 짝수라서 성공임`;
+                    fnCallback(result);
+                } else {
+                    let error = new Error(`${intNum}이 홀수라서 실패임`);
+                    fnFailureCallback(error);
+                }
+                }, 3000);
+        }
+        fnTemplate(fnMiddle);
+    </script>
+</body>
+</html>

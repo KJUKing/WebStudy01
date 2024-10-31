@@ -48,7 +48,7 @@ public class PersonServiceImpl implements PersonService{
 
     @Override
     public boolean modifyPerson(PersonVO person) {
-        return false;
+        return dao.updatePerson(person) > 0;
     }
 
     @Override

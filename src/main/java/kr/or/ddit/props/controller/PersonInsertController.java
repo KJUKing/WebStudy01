@@ -43,21 +43,17 @@ public class PersonInsertController extends HttpServlet {
         person.setName(req.getParameter("name"));
         person.setGender(req.getParameter("gender"));
         person.setAge(req.getParameter("age"));
-        person.setAddress(req.getParameter("addr"));
+        person.setAddress(req.getParameter("address"));
 
         Map<String, String> errors = new HashMap<String, String>();
         validate(person, errors);
         boolean valid = errors.isEmpty();
 
-        boolean cnt = service.createPerson(person);
         if (valid) {
-
             boolean result = service.createPerson(person);
             if (result) {
-
                 HttpSession session = req.getSession();
                 session.setAttribute("id", req.getParameter("id"));
-
                 resp.sendRedirect(req.getContextPath() + "/props/personList.do");
             } else {
                 resp.sendError(500, "서버문제있음");
