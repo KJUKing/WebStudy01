@@ -5,10 +5,10 @@ import kr.or.ddit.db.ConnectionFactory;
 import kr.or.ddit.db.ConnectionFactoryCP;
 import kr.or.ddit.vo.MemberVO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,17 +44,50 @@ public class MemberDAOImpl implements MemberDAO {
             ResultSet rs = pstmt.getResultSet();
             MemberVO saved = null;
             if (rs.next()) {
-                saved = new MemberVO();
-                saved.setMemId(rs.getString("MEM_ID"));
-                saved.setMemPass(rs.getString("MEM_PASS"));
-                saved.setMemName(rs.getString("MEM_NAME"));
-                saved.setMemMail(rs.getString("MEM_MAIL"));
-                saved.setMemHp(rs.getString("MEM_HP"));
+                saved = resultSetToPerson(rs, MemberVO.class);
             }
             return saved;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private <T> T resultSetToPerson(ResultSet rs, Class<T> resultType) throws SQLException{
+
+        try {
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int cnt = rsmd.getColumnCount();
+            List<String> columnNames = new ArrayList<>(cnt);
+            for (int i = 1; i <= cnt; i++) {
+                columnNames.add(rsmd.getColumnName(i));
+            }
+            T instance = resultType.newInstance();
+            for (String cn : columnNames) {
+                String propertyName = cn.toLowerCase();
+                PropertyDescriptor pd = new PropertyDescriptor(propertyName, resultType);
+                Method setter = pd.getWriteMethod();
+                setter.invoke(instance, rs.getString(cn));
+            }
+            return instance;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+//        PersonVO person = new PersonVO();
+//
+//        if (columnNames.contains("ID")) {
+//            person.setId(rs.getString(1));
+//        }
+//        person.setId(rs.getString("ID"));
+//        person.setName(rs.getString("NAME"));
+//        person.setGender(rs.getString("GENDER"));
+//        person.setAge(rs.getString("AGE"));
+//        if (columnNames.contains("ADDRESS")) {
+//            person.setAddress(rs.getString("ADDRESS"));
+//        }
+//        return person;
     }
 
     @Override

@@ -28,17 +28,18 @@ public class PersonDAOImplTest {
 //        assertEquals(i, 0);
     }
 
-    @Disabled
+
     @Test
     void testSelectPersonList() {
         dao.selectPersonList().forEach(System.out::println);
     }
 
 
-    @Disabled
+
     @Test
     void testSelectPerson() {
         assertNotNull(dao.selectPerson("a001"));
+        System.out.println(dao.selectPerson("a001"));
         assertNull(dao.selectPerson("asdfasdfasd"));
     }
 

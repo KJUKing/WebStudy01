@@ -3,7 +3,12 @@ package kr.or.ddit.props.dao;
 import kr.or.ddit.db.ConnectionFactory;
 import kr.or.ddit.db.ConnectionFactoryCP;
 import kr.or.ddit.props.PersonVO;
+import org.apache.commons.text.WordUtils;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,7 +69,7 @@ public class PersonDAOImpl implements PersonDAO {
             pstmt.setString(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                person = resultSetToPerson(rs);
+                person = resultSetToPerson(rs, PersonVO.class);
             }
             return person;
 
@@ -86,7 +91,7 @@ public class PersonDAOImpl implements PersonDAO {
         ){
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()) {
-                list.add(resultSetToPerson(rs));
+                list.add(resultSetToPerson(rs, PersonVO.class));
             }
             return list;
         } catch (SQLException e) {
@@ -94,26 +99,43 @@ public class PersonDAOImpl implements PersonDAO {
         }
     }
 
-    private PersonVO resultSetToPerson(ResultSet rs) throws SQLException {
+    private <T> T resultSetToPerson(ResultSet rs, Class<T> resultType) throws SQLException{
 
-        ResultSetMetaData rsmd = rs.getMetaData();
-        int cnt = rsmd.getColumnCount();
-        List<String> columnNames = new ArrayList<>(cnt);
-        for (int i = 1; i <= cnt; i++) {
-            columnNames.add(rsmd.getColumnName(i));
+        try {
+
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int cnt = rsmd.getColumnCount();
+            List<String> columnNames = new ArrayList<>(cnt);
+            for (int i = 1; i <= cnt; i++) {
+                columnNames.add(rsmd.getColumnName(i));
+            }
+            T instance = resultType.newInstance();
+            for (String cn : columnNames) {
+
+                String propertyName = WordUtils.capitalizeFully("A"+cn, '_').substring(1).replace("_", "");
+                PropertyDescriptor pd = new PropertyDescriptor(propertyName, resultType);
+                Method setter = pd.getWriteMethod();
+                setter.invoke(instance, rs.getString(cn));
+            }
+            return instance;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        PersonVO person = new PersonVO();
-        if (columnNames.contains("ID")) {
-            person.setId(rs.getString(1));
-        }
-        person.setId(rs.getString("ID"));
-        person.setName(rs.getString("NAME"));
-        person.setGender(rs.getString("GENDER"));
-        person.setAge(rs.getString("AGE"));
-        if (columnNames.contains("ADDRESS")) {
-            person.setAddress(rs.getString("ADDRESS"));
-        }
-        return person;
+
+
+//        PersonVO person = new PersonVO();
+//
+//        if (columnNames.contains("ID")) {
+//            person.setId(rs.getString(1));
+//        }
+//        person.setId(rs.getString("ID"));
+//        person.setName(rs.getString("NAME"));
+//        person.setGender(rs.getString("GENDER"));
+//        person.setAge(rs.getString("AGE"));
+//        if (columnNames.contains("ADDRESS")) {
+//            person.setAddress(rs.getString("ADDRESS"));
+//        }
+//        return person;
     }
 
     @Override
