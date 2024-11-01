@@ -1,6 +1,5 @@
 package kr.or.ddit.member.dao;
 
-import com.sun.org.apache.bcel.internal.generic.Select;
 import kr.or.ddit.db.ConnectionFactory;
 import kr.or.ddit.db.ConnectionFactoryCP;
 import kr.or.ddit.vo.MemberVO;
@@ -52,10 +51,8 @@ public class MemberDAOImpl implements MemberDAO {
         }
     }
 
-    private <T> T resultSetToPerson(ResultSet rs, Class<T> resultType) throws SQLException{
-
+    private <T> T resultSetToPerson(ResultSet rs, Class<T> resultType) throws SQLException {
         try {
-
             ResultSetMetaData rsmd = rs.getMetaData();
             int cnt = rsmd.getColumnCount();
             List<String> columnNames = new ArrayList<>(cnt);
@@ -64,10 +61,26 @@ public class MemberDAOImpl implements MemberDAO {
             }
             T instance = resultType.newInstance();
             for (String cn : columnNames) {
-                String propertyName = cn.toLowerCase();
-                PropertyDescriptor pd = new PropertyDescriptor(propertyName, resultType);
+                // 컬럼명을 CamelCase로 변환
+                StringBuilder propertyName = new StringBuilder();
+                boolean nextUpper = false;
+                for (char c : cn.toLowerCase().toCharArray()) {
+                    if (c == '_') {
+                        nextUpper = true;
+                    } else if (nextUpper) {
+                        propertyName.append(Character.toUpperCase(c));
+                        nextUpper = false;
+                    } else {
+                        propertyName.append(c);
+                    }
+                }
+
+                // PropertyDescriptor를 통해 setter 메서드 호출
+                PropertyDescriptor pd = new PropertyDescriptor(propertyName.toString(), resultType);
                 Method setter = pd.getWriteMethod();
-                setter.invoke(instance, rs.getString(cn));
+                if (setter != null) {
+                    setter.invoke(instance, rs.getString(cn));
+                }
             }
             return instance;
         } catch (Exception e) {
